@@ -4,17 +4,25 @@ import { View, TextInput, Pressable, Text } from 'react-native';
 import styles from '../utils/styles';
 
 const Register = ({ navigation }) => {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [passwordRepeat, setPasswordRepeat] = useState('');
 
   const handleRegister = () => {
-    //
+    navigation.navigate('Confirm Email');
   };
 
   return (
     <View style={styles.over}>
       <View style={styles.container}>
         <Text style={styles.headerStyle}>Register</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Username"
+          value={username}
+          onChangeText={setUsername}
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -27,6 +35,13 @@ const Register = ({ navigation }) => {
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
+          secureTextEntry
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Repeat Password "
+          value={passwordRepeat}
+          onChangeText={setPasswordRepeat}
           secureTextEntry
         />
         <Pressable onPress={handleRegister} style={styles.button}>

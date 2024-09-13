@@ -8,7 +8,10 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    //
+    navigation.navigate('Home');
+  };
+  const handleForgotPassword = () => {
+    navigation.navigate('Forgot Password');
   };
 
   return (
@@ -31,6 +34,9 @@ const Login = ({ navigation }) => {
         />
         <Pressable onPress={handleLogin} style={styles.button}>
           <Text style={styles.textStyle}>Submit</Text>
+        </Pressable>
+        <Pressable onPress={handleForgotPassword} style={styles.button2}>
+          <Text style={styles.textStyle2}>Forgot Password?</Text>
         </Pressable>
         <Text>Don't have an account?
           <Text onPress={() => navigation.navigate('Register')} style={styles.link}> Register</Text>
