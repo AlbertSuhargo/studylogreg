@@ -1,38 +1,62 @@
 import { View, Text, TextInput, Pressable } from 'react-native';
 import * as React from 'react';
 import styles from '../utils/styles';
-import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = (data) => {
+    console.log(data);
     navigation.navigate('Home');
   };
   const handleForgotPassword = () => {
     navigation.navigate('Forgot Password');
   };
 
+  const { control, handleSubmit } = useForm();
+
   return (
     <View style={styles.over}>
       <View style={styles.container}>
         <Text style={styles.headerStyle}>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
+        <Controller
+          control={control}
+          name="username"
+          rules={{ required: 'Username is required' }}
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) =>
+            <>
+              {error && <Text style={{ color: 'red', alignSelf: 'stretch' }}>{error.message || 'Error'}</Text>}
+              <TextInput
+                style={[styles.input, { borderColor: error ? 'red' : '#ddd' }]}
+                placeholder="Email"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                keyboardType="email-address"
+              />
+            </>
+          }
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
+        <Controller
+          control={control}
+          name="password"
+          rules={{ required: 'Password is required', minLength: {value: 3, message: 'Password should be minimum 3 characters'} }}
+          render={({ field: { value, onChange, onBlur }, fieldState: { error } }) =>
+            <>
+              {error && <Text style={{ color: 'red', alignSelf: 'stretch' }}>{error.message || 'Error'}</Text>}
+              <TextInput
+                style={[styles.input, { borderColor: error ? 'red' : '#ddd' }]}
+                placeholder="Password"
+                value={value}
+                onChangeText={onChange}
+                onBlur={onBlur}
+                secureTextEntry
+              />
+            </>
+          }
         />
-        <Pressable onPress={handleLogin} style={styles.button}>
+
+        <Pressable onPress={handleSubmit(handleLogin)} style={styles.button}>
           <Text style={styles.textStyle}>Submit</Text>
         </Pressable>
         <Pressable onPress={handleForgotPassword} style={styles.button2}>
