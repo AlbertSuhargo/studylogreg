@@ -2,6 +2,7 @@ import * as React from 'react';
 import { View, TextInput, Pressable, Text } from 'react-native';
 import styles from '../utils/styles';
 import { useForm, Controller } from 'react-hook-form';
+import axios from 'axios';
 
 const EMAIL_REGEX = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
 
@@ -9,8 +10,23 @@ const Register = ({ navigation }) => {
   const { control, handleSubmit, watch } = useForm();
   const password = watch('password');
 
-  const handleRegister = () => {
-    navigation.navigate('Confirm Email');
+  const handleRegister = async (data: any) => {
+    try {
+      const response = await axios.post('http://10.0.2.2:3000/register', {
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      });
+
+      if (response.status === 200) {
+        console.log('Registration successful');
+        navigation.navigate('Login');
+      } else {
+        console.warn('Registration failed:', response.data.message);
+      }
+    } catch (error: any) {
+      console.warn('Error registering:', error.response ? error.response.data : error.message);
+    }
   };
 
   return (
@@ -81,7 +97,7 @@ const Register = ({ navigation }) => {
           control={control}
           name="repeat-password"
           rules={{
-            validate: () => repeatPassword === password || 'Passwords do not match',
+            validate: value => value === password || 'Passwords do not match',
           }}
           render={({ field: { value, onChange, onBlur }, fieldState: { error } }) => (
             <>
